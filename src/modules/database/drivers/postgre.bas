@@ -26,8 +26,18 @@
 namespace ext.database.driver
 
 type PostgreDriverInfo
+#ifndef pg_conn
     db as any ptr
+#else
+    db as pg_conn
+#endif    
+
+#ifndef pg_result
     res as any ptr
+#else
+    db as pg_result
+#endif
+    
     conn_s as string
     st as uinteger
     ep as uinteger
