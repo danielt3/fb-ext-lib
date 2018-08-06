@@ -25,19 +25,16 @@
 
 namespace ext.database.driver
 
-type PostgreDriverInfo
-#ifndef pg_conn
-    db as any ptr
-#else
-    db as pg_conn
-#endif    
-
-#ifndef pg_result
-    res as any ptr
-#else
-    db as pg_result
+#ifdef FIX_POSTGRESQL_TYPES
+type pg_conn as Any Ptr
+type pg_result as Any Ptr
+type pg_cancel as Any Ptr
+type res as Any Ptr
 #endif
-    
+
+type PostgreDriverInfo
+    db as pg_conn
+    res as pg_result
     conn_s as string
     st as uinteger
     ep as uinteger
