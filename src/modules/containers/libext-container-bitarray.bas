@@ -54,7 +54,7 @@ namespace ext
 
     '' :::::
     destructor BitArray ( )
-        if m_bits then delete[] m_bits
+        if m_bits then DeAllocate( m_bits )
     end destructor
 
     '' :::::
@@ -138,7 +138,7 @@ namespace ext
         else
             var min_units = int((num + (bitsPerStorage - 1)) / bitsPerStorage)
 
-            m_bits = new SizeType[min_units]
+            m_bits = Allocate( min_units )
             m_size = num
 
         end if
