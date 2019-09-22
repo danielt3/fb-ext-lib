@@ -30,7 +30,7 @@ function BloomFilter.load( byref fname as const string ) as ext.bool
     dim size_f as uinteger
     if open( fname, for binary, access read, as #f) = 0 then
         size_f = lof(f)
-        x = new uinteger[size_f/4]
+        x = Allocate( size_f )
         if x = 0 then return ext.bool.true
         get #f, ,*x,size_f/4
         close #f
@@ -39,7 +39,7 @@ function BloomFilter.load( byref fname as const string ) as ext.bool
     end if
     setExpected(x[0])
     m_ba->binload(cast(ubyte ptr,x+1),size_f-4)
-    delete[] x
+    DeAllocate( x )
     return ext.bool.false
 end function
 

@@ -45,11 +45,13 @@ namespace ext.hashes.hmac
         end if
         var okpad = translate(tkey,&h5C,BLOCK_SIZE)
         var ikpad = translate(tkey,&h36,BLOCK_SIZE)
+        
+        dim p25 as ubyte ptr
 
         var p1 = ikpad & msg
         var p2 = c(@(p1[0]),len(p1))
         var p2l = len(p2)/2
-        var p25 = new ubyte[p2l+1]
+        p25 = Allocate( p2l+1 )
         var cnt = 0u
         for n as uinteger = 0 to len(p2)-2 step 2
             p25[cnt] = cubyte("&h" & chr(p2[n]) & chr(p2[n+1]))
@@ -60,7 +62,10 @@ namespace ext.hashes.hmac
         next
         p25[p2l] = 0
         var p35l = BLOCK_SIZE+p2l
-        var p35 = new ubyte[p35l+1]
+        
+        dim p35 as ubyte ptr
+        
+        p35 = Allocate( p35l+1 )
         for n as uinteger = 0 to BLOCK_SIZE-1
             p35[n] = okpad[n]
         next
@@ -71,8 +76,8 @@ namespace ext.hashes.hmac
         next
         p35[p35l] = 0
         var ret = lcase(c(p35,p35l))
-        delete[] p35
-        delete[] p25
+        DeAllocate( p35 )
+        DeAllocate( p25 )
         return ret
 
     end function

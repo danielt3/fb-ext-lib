@@ -25,6 +25,11 @@
 
 namespace ext.database.driver
 
+type pg_conn as Any Ptr
+type pg_result as Any Ptr
+type pg_cancel as Any Ptr
+type res as Any Ptr
+
 type PostgreDriverInfo
     db as pg_conn
     res as pg_result
