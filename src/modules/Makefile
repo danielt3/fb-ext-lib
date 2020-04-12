@@ -101,10 +101,10 @@ endif
 # :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 # TODO: figure out how to move these into CreateAutoBuildRules:
 AutoBuildSources = $(wildcard $(1)/*.bas)
-AutoBuildObjects = $(patsubst %.bas,$(if $(MT),%.mt.o,%.o),\
+AutoBuildObjects = $(patsubst %.bas,$(if $(MT),$(if $(NDEBUG),%.mt.o,%.dbg.mt.o),$(if $(NDEBUG),%.o,%.dbg.o)),\
                             $(call AutoBuildSources,$(1)))
 
-AutoBuildLib = libext-$(1)$(if $(MT),.mt).a
+AutoBuildLib = libext-$(1)$(if $(MT),$(if $(NDEBUG),.mt.a,.dbg.mt.a),$(if $(NDEBUG),.a,.dbg.a))
 AutoBuildLibOut  = $(LIBRARY_DIR)/$(call AutoBuildLib,$(1))
 AutoBuildLibFile = $(LIBRARY_DIR)/$(call AutoBuildLib,$(1))
 
@@ -121,7 +121,13 @@ $(call AutoBuildLibFile,$(1)): $(call AutoBuildObjects,$(1))
 $(1)/%.o: $(1)/%.bas
 	$(FBC) $(FBC_CFLAGS) -i $(INCLUDE_DIR) $$< -o $$@
 
+$(1)/%.dbg.o: $(1)/%.bas
+	$(FBC) $(FBC_CFLAGS) -i $(INCLUDE_DIR) $$< -o $$@
+
 $(1)/%.mt.o: $(1)/%.bas
+	$(FBC) $(FBC_CFLAGS) -i $(INCLUDE_DIR) $$< -o $$@
+
+$(1)/%.dbg.mt.o: $(1)/%.bas
 	$(FBC) $(FBC_CFLAGS) -i $(INCLUDE_DIR) $$< -o $$@
 
 .PHONY: clean-$(1)
